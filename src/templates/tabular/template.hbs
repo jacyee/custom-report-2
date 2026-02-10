@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{title}}</title>
+  <style>{{{styles}}}</style>
+</head>
+<body>
+  <div class="tabular-report">
+    <div class="title-bar">
+      <span class="title-text">{{title}}</span>
+      <span class="title-meta">{{totalRows}} records &middot; {{generatedAt}}</span>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          {{#each columns}}
+          <th>{{this.label}}</th>
+          {{/each}}
+        </tr>
+      </thead>
+      <tbody>
+        {{#each rows}}
+        <tr class="{{#if (eq (lookup this '_even') true)}}even{{/if}}">
+          {{#each ../columns}}
+          <td>{{formatValue (lookup ../this this.key) this.format}}</td>
+          {{/each}}
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
