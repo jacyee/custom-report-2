@@ -36,6 +36,7 @@ jobs:
       - name: Build static site
         run: npx next build
         env:
+          STATIC_EXPORT: 'true'
           NEXT_PUBLIC_BASE_PATH: /custom-report-2
 
       - uses: actions/upload-pages-artifact@v3

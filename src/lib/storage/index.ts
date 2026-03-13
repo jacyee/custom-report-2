@@ -3,7 +3,10 @@ import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { ReportConfig } from '@/lib/types';
 
-const DATA_DIR = path.join(process.cwd(), 'data');
+// Use /tmp on Vercel (serverless has a read-only filesystem except /tmp)
+const DATA_DIR = process.env.VERCEL
+  ? path.join('/tmp', 'data')
+  : path.join(process.cwd(), 'data');
 const DATA_FILE = path.join(DATA_DIR, 'reports.json');
 
 function ensureDataDir(): void {
