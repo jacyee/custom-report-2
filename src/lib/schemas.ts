@@ -40,3 +40,16 @@ export const generateRequestSchema = z.object({
   reportId: z.string().uuid(),
   format: z.enum(['html', 'pdf', 'excel', 'csv']),
 });
+
+export const createCustomerSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Valid email is required'),
+  contractId: z.string().optional(),
+  contractedPower: z.string().optional(),
+  waterFlowRate: z.string().optional(),
+  temperatureMin: z.string().optional(),
+  temperatureMax: z.string().optional(),
+  humidityMin: z.string().optional(),
+  humidityMax: z.string().optional(),
+  notes: z.string().optional(),
+});

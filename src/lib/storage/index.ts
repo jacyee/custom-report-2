@@ -1,13 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import { ReportConfig } from '@/lib/types';
+import { ReportConfig, Customer } from '@/lib/types';
 
 // Use /tmp on Vercel (serverless has a read-only filesystem except /tmp)
 const DATA_DIR = process.env.VERCEL
   ? path.join('/tmp', 'data')
   : path.join(process.cwd(), 'data');
 const DATA_FILE = path.join(DATA_DIR, 'reports.json');
+const CUSTOMERS_FILE = path.join(DATA_DIR, 'customers.json');
 
 function ensureDataDir(): void {
   if (!fs.existsSync(DATA_DIR)) {
@@ -77,4 +78,36 @@ export async function deleteReport(id: string): Promise<boolean> {
   if (filtered.length === reports.length) return false;
   writeAll(filtered);
   return true;
+}
+
+// ── Customers ────────────────────────────────────────────────────────────────
+
+function ensureCustomersFile(): void {
+  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+  if (!fs.existsSync(CUSTOMERS_FILE)) fs.writeFileSync(CUSTOMERS_FILE, '[]', 'utf-8');
+}
+
+function readAllCustomers(): Customer[] {
+  ensureCustomersFile();
+  return JSON.parse(fs.readFileSync(CUSTOMERS_FILE, 'utf-8')) as Customer[];
+}
+
+function writeAllCustomers(customers: Customer[]): void {
+  ensureCustomersFile();
+  fs.writeFileSync(CUSTOMERS_FILE, JSON.stringify(customers, null, 2), 'utf-8');
+}
+
+export async function getAllCustomers(): Promise<Customer[]> {
+  return readAllCustomers();
+}
+
+export async function createCustomer(
+  data: Omit<Customer, 'id' | 'createdAt' | 'updatedAt'>
+): Promise<Customer> {
+  const customers = readAllCustomers();
+  const now = new Date().toISOString();
+  const customer: Customer = { ...data, id: uuidv4(), createdAt: now, updatedAt: now };
+  customers.push(customer);
+  writeAllCustomers(customers);
+  return customer;
 }

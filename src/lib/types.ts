@@ -52,3 +52,19 @@ export interface GenerateRequest {
   reportId: string;
   format: OutputFormat;
 }
+
+export interface Customer {
+  id: string;
+  name: string;
+  email: string;
+  contractId?: string;
+  contractedPower?: string;
+  waterFlowRate?: string;
+  temperatureMin?: string;
+  temperatureMax?: string;
+  humidityMin?: string;
+  humidityMax?: string;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
