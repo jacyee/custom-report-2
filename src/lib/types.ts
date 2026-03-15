@@ -63,6 +63,7 @@ export interface ReportScheduleGroup {
   site?: string;
   page?: string;
   reportingLevel?: 'site' | 'room';
+  itemGroup?: string;
   reportType?: 'standard' | 'custom' | 'item-csv';
   frequency?: ScheduleFrequency;
   scheduledTime?: string;

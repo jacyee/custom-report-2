@@ -45,6 +45,20 @@ const REPORTING_LEVEL_OPTIONS = [
   { label: 'Room', value: 'room' },
 ];
 
+const ITEM_GROUP_OPTIONS: Record<string, { label: string; value: string }[]> = {
+  site: [
+    { label: 'Reporting Group - NonUPS', value: 'reporting-group-nonups' },
+    { label: 'Reporting Group - UPS', value: 'reporting-group-ups' },
+  ],
+  room: [
+    { label: 'Reporting Group - Busbar 1 - Customer A', value: 'reporting-group-busbar1-customer-a' },
+    { label: 'Reporting Group - Busbar 2 - Customer A', value: 'reporting-group-busbar2-customer-a' },
+    { label: 'Reporting Group - Rack Group 1 - Customer A', value: 'reporting-group-rack-group1-customer-a' },
+    { label: 'Reporting Group - Rack Group 2 - Customer B', value: 'reporting-group-rack-group2-customer-b' },
+    { label: 'Reporting Group - Rack Group 3 - Customer B', value: 'reporting-group-rack-group3-customer-b' },
+  ],
+};
+
 const FREQUENCY_OPTIONS = [
   { label: 'Select frequency…', value: '' },
   { label: 'Daily', value: 'daily' },
@@ -75,6 +89,7 @@ export default function NewScheduleGroupPage() {
     site: '',
     page: '',
     reportingLevel: '',
+    itemGroup: '',
     reportType: '',
     frequency: '',
     scheduledTime: '',
@@ -112,6 +127,7 @@ export default function NewScheduleGroupPage() {
           site: form.site || undefined,
           page: form.page || undefined,
           reportingLevel: form.reportingLevel || undefined,
+          itemGroup: form.itemGroup || undefined,
           reportType: form.reportType || undefined,
           frequency: form.frequency || undefined,
           scheduledTime: form.scheduledTime.trim() || undefined,
@@ -217,7 +233,7 @@ export default function NewScheduleGroupPage() {
             <label className="block text-sm font-medium text-zinc-200">Reporting Level</label>
             <select
               value={form.reportingLevel}
-              onChange={(e) => set('reportingLevel', e.target.value)}
+              onChange={(e) => { set('reportingLevel', e.target.value); set('itemGroup', ''); }}
               className="block w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
             >
               {REPORTING_LEVEL_OPTIONS.map((o) => (
@@ -225,6 +241,21 @@ export default function NewScheduleGroupPage() {
               ))}
             </select>
           </div>
+          {form.reportingLevel && (
+            <div className="space-y-1">
+              <label className="block text-sm font-medium text-zinc-200">Item Group</label>
+              <select
+                value={form.itemGroup}
+                onChange={(e) => set('itemGroup', e.target.value)}
+                className="block w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              >
+                <option value="">Select item group…</option>
+                {(ITEM_GROUP_OPTIONS[form.reportingLevel] ?? []).map((o) => (
+                  <option key={o.value} value={o.value}>{o.label}</option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
 
         <div>
