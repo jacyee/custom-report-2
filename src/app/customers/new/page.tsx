@@ -8,7 +8,7 @@ import { useToast } from '@/components/ui/toast';
 
 export default function NewCustomerPage() {
   const router = useRouter();
-  const { showToast } = useToast();
+  const { addToast } = useToast();
 
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -64,10 +64,10 @@ export default function NewCustomerPage() {
         throw new Error(data.error ?? 'Failed to create customer');
       }
 
-      showToast('Customer created successfully', 'success');
+      addToast('Customer created successfully', 'success');
       router.push('/');
     } catch (err) {
-      showToast(err instanceof Error ? err.message : 'Something went wrong', 'error');
+      addToast(err instanceof Error ? err.message : 'Something went wrong', 'error');
     } finally {
       setSaving(false);
     }
