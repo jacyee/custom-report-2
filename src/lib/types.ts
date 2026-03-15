@@ -59,6 +59,7 @@ export interface ReportScheduleGroup {
   id: string;
   name: string;
   customerId?: string;
+  reportType?: 'standard' | 'custom';
   frequency?: ScheduleFrequency;
   scheduledTime?: string;
   recipients?: string;
