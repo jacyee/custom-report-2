@@ -58,6 +58,7 @@ export type ScheduleFrequency = 'daily' | 'weekly' | 'monthly';
 export interface ReportScheduleGroup {
   id: string;
   name: string;
+  organisation?: string;
   customerId?: string;
   site?: string;
   reportType?: 'standard' | 'custom' | 'item-csv';

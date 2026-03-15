@@ -15,6 +15,13 @@ const REPORT_TYPE_OPTIONS = [
   { label: 'Item CSV', value: 'item-csv' },
 ];
 
+const ORGANISATION_OPTIONS = [
+  { label: 'Select organisation…', value: '' },
+  { label: 'Organisation 1', value: 'organisation-1' },
+  { label: 'Organisation 2', value: 'organisation-2' },
+  { label: 'Organisation 3', value: 'organisation-3' },
+];
+
 const SITE_OPTIONS = [
   { label: 'Select site…', value: '' },
   { label: 'Site 01', value: 'site-01' },
@@ -47,6 +54,7 @@ export default function NewScheduleGroupPage() {
 
   const [form, setForm] = useState({
     name: '',
+    organisation: '',
     customerId: '',
     site: '',
     reportType: '',
@@ -124,6 +132,18 @@ export default function NewScheduleGroupPage() {
             onChange={(e) => set('name', e.target.value)}
             error={errors.name}
           />
+          <div className="space-y-1">
+            <label className="block text-sm font-medium text-zinc-200">Organisation</label>
+            <select
+              value={form.organisation}
+              onChange={(e) => set('organisation', e.target.value)}
+              className="block w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            >
+              {ORGANISATION_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+          </div>
           <div className="space-y-1">
             <label className="block text-sm font-medium text-zinc-200">Report Type</label>
             <select
