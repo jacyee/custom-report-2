@@ -29,6 +29,16 @@ const SITE_OPTIONS = [
   { label: 'Site 03 Building', value: 'site-03-building' },
 ];
 
+const PAGE_OPTIONS = [
+  { label: 'Select page…', value: '' },
+  { label: 'Page 1', value: 'page-1' },
+  { label: 'Page 2', value: 'page-2' },
+  { label: 'Page 3', value: 'page-3' },
+  { label: 'Page 4', value: 'page-4' },
+  { label: 'Page 5', value: 'page-5' },
+  { label: 'Page 6', value: 'page-6' },
+];
+
 const REPORTING_LEVEL_OPTIONS = [
   { label: 'Select reporting level…', value: '' },
   { label: 'Site', value: 'site' },
@@ -63,6 +73,7 @@ export default function NewScheduleGroupPage() {
     organisation: '',
     customerId: '',
     site: '',
+    page: '',
     reportingLevel: '',
     reportType: '',
     frequency: '',
@@ -99,6 +110,7 @@ export default function NewScheduleGroupPage() {
           name: form.name.trim(),
           customerId: form.customerId || undefined,
           site: form.site || undefined,
+          page: form.page || undefined,
           reportingLevel: form.reportingLevel || undefined,
           reportType: form.reportType || undefined,
           frequency: form.frequency || undefined,
@@ -185,6 +197,18 @@ export default function NewScheduleGroupPage() {
               className="block w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
             >
               {SITE_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+          </div>
+          <div className="space-y-1">
+            <label className="block text-sm font-medium text-zinc-200">Page</label>
+            <select
+              value={form.page}
+              onChange={(e) => set('page', e.target.value)}
+              className="block w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            >
+              {PAGE_OPTIONS.map((o) => (
                 <option key={o.value} value={o.value}>{o.label}</option>
               ))}
             </select>
