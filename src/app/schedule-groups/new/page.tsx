@@ -29,6 +29,12 @@ const SITE_OPTIONS = [
   { label: 'Site 03 Building', value: 'site-03-building' },
 ];
 
+const REPORTING_LEVEL_OPTIONS = [
+  { label: 'Select reporting level…', value: '' },
+  { label: 'Site', value: 'site' },
+  { label: 'Room', value: 'room' },
+];
+
 const FREQUENCY_OPTIONS = [
   { label: 'Select frequency…', value: '' },
   { label: 'Daily', value: 'daily' },
@@ -57,6 +63,7 @@ export default function NewScheduleGroupPage() {
     organisation: '',
     customerId: '',
     site: '',
+    reportingLevel: '',
     reportType: '',
     frequency: '',
     scheduledTime: '',
@@ -92,6 +99,7 @@ export default function NewScheduleGroupPage() {
           name: form.name.trim(),
           customerId: form.customerId || undefined,
           site: form.site || undefined,
+          reportingLevel: form.reportingLevel || undefined,
           reportType: form.reportType || undefined,
           frequency: form.frequency || undefined,
           scheduledTime: form.scheduledTime.trim() || undefined,
@@ -177,6 +185,18 @@ export default function NewScheduleGroupPage() {
               className="block w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
             >
               {SITE_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+          </div>
+          <div className="space-y-1">
+            <label className="block text-sm font-medium text-zinc-200">Reporting Level</label>
+            <select
+              value={form.reportingLevel}
+              onChange={(e) => set('reportingLevel', e.target.value)}
+              className="block w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            >
+              {REPORTING_LEVEL_OPTIONS.map((o) => (
                 <option key={o.value} value={o.value}>{o.label}</option>
               ))}
             </select>
