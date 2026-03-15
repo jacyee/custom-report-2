@@ -60,7 +60,7 @@ export interface ReportScheduleGroup {
   name: string;
   customerId?: string;
   site?: string;
-  reportType?: 'standard' | 'custom';
+  reportType?: 'standard' | 'custom' | 'item-csv';
   frequency?: ScheduleFrequency;
   scheduledTime?: string;
   recipients?: string;

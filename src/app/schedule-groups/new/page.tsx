@@ -12,6 +12,7 @@ const REPORT_TYPE_OPTIONS = [
   { label: 'Select report type…', value: '' },
   { label: 'Standard EkkoSoft Report', value: 'standard' },
   { label: 'Custom Report Template', value: 'custom' },
+  { label: 'Item CSV', value: 'item-csv' },
 ];
 
 const SITE_OPTIONS = [
