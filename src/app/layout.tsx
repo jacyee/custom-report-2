@@ -18,9 +18,14 @@ export default function RootLayout({
         <ToastProvider>
           <nav className="border-b border-zinc-800 bg-zinc-900">
             <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-              <a href="/" className="font-bold text-lg text-zinc-100 hover:text-zinc-300 transition-colors">
-                Report Generator
-              </a>
+              <div className="flex items-center gap-6">
+                <a href="/" className="font-bold text-lg text-zinc-100 hover:text-zinc-300 transition-colors">
+                  Report Generator
+                </a>
+                <a href="/customers" className="text-sm text-zinc-400 hover:text-zinc-100 transition-colors">
+                  Customers
+                </a>
+              </div>
               <div className="flex items-center gap-2">
                 <a
                   href="/schedule-groups/new"

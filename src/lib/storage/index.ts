@@ -134,6 +134,14 @@ export async function createScheduleGroup(
   return group;
 }
 
+export async function deleteCustomer(id: string): Promise<boolean> {
+  const customers = readAllCustomers();
+  const filtered = customers.filter((c) => c.id !== id);
+  if (filtered.length === customers.length) return false;
+  writeAllCustomers(filtered);
+  return true;
+}
+
 export async function createCustomer(
   data: Omit<Customer, 'id' | 'createdAt' | 'updatedAt'>
 ): Promise<Customer> {
