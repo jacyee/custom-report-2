@@ -102,6 +102,23 @@ export async function getAllCustomers(): Promise<Customer[]> {
   return readAllCustomers();
 }
 
+export async function getCustomerById(id: string): Promise<Customer | null> {
+  const customers = readAllCustomers();
+  return customers.find((c) => c.id === id) ?? null;
+}
+
+export async function updateCustomer(
+  id: string,
+  data: Partial<Omit<Customer, 'id' | 'createdAt' | 'updatedAt'>>
+): Promise<Customer | null> {
+  const customers = readAllCustomers();
+  const index = customers.findIndex((c) => c.id === id);
+  if (index === -1) return null;
+  customers[index] = { ...customers[index], ...data, updatedAt: new Date().toISOString() };
+  writeAllCustomers(customers);
+  return customers[index];
+}
+
 // ── Schedule Groups ───────────────────────────────────────────────────────────
 
 function ensureScheduleGroupsFile(): void {

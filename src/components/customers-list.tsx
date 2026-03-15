@@ -78,6 +78,9 @@ export function CustomersList() {
             )}
           </div>
           <div className="flex items-center gap-2 ml-4 shrink-0">
+            <a href={`/customers/${customer.id}/edit`}>
+              <Button variant="secondary" size="sm">Edit</Button>
+            </a>
             <Button
               variant="danger"
               size="sm"
