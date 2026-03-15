@@ -17,7 +17,11 @@ export default function NewCustomerPage() {
     name: '',
     contractId: '',
     contractedPower: '',
+    allocatedPower: '',
+    generatorFuelLevel: '',
     waterFlowRate: '',
+    chilledWaterSupplyTemp: '',
+    chilledWaterReturnTemp: '',
     temperatureMin: '',
     temperatureMax: '',
     humidityMin: '',
@@ -30,16 +34,9 @@ export default function NewCustomerPage() {
     setErrors((e) => ({ ...e, [field]: '' }));
   }
 
-  function validate() {
-    const errs: Record<string, string> = {};
-    if (!form.name.trim()) errs.name = 'Name is required';
-    return errs;
-  }
-
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const errs = validate();
-    if (Object.keys(errs).length) { setErrors(errs); return; }
+    if (!form.name.trim()) { setErrors({ name: 'Name is required' }); return; }
 
     setSaving(true);
     try {
@@ -50,7 +47,11 @@ export default function NewCustomerPage() {
           name: form.name.trim(),
           contractId: form.contractId.trim() || undefined,
           contractedPower: form.contractedPower.trim() || undefined,
+          allocatedPower: form.allocatedPower.trim() || undefined,
+          generatorFuelLevel: form.generatorFuelLevel.trim() || undefined,
           waterFlowRate: form.waterFlowRate.trim() || undefined,
+          chilledWaterSupplyTemp: form.chilledWaterSupplyTemp.trim() || undefined,
+          chilledWaterReturnTemp: form.chilledWaterReturnTemp.trim() || undefined,
           temperatureMin: form.temperatureMin.trim() || undefined,
           temperatureMax: form.temperatureMax.trim() || undefined,
           humidityMin: form.humidityMin.trim() || undefined,
@@ -65,7 +66,7 @@ export default function NewCustomerPage() {
       }
 
       addToast('Customer created successfully', 'success');
-      router.push('/');
+      router.push('/customers');
     } catch (err) {
       addToast(err instanceof Error ? err.message : 'Something went wrong', 'error');
     } finally {
@@ -107,10 +108,34 @@ export default function NewCustomerPage() {
               onChange={(e) => set('contractedPower', e.target.value)}
             />
             <Input
+              label="Allocated Power"
+              placeholder="e.g. 450 kW"
+              value={form.allocatedPower}
+              onChange={(e) => set('allocatedPower', e.target.value)}
+            />
+            <Input
+              label="Generator Fuel Level (Litre)"
+              placeholder="e.g. 2000"
+              value={form.generatorFuelLevel}
+              onChange={(e) => set('generatorFuelLevel', e.target.value)}
+            />
+            <Input
               label="Water Flow Rate (Litre/s)"
               placeholder="e.g. 12.5"
               value={form.waterFlowRate}
               onChange={(e) => set('waterFlowRate', e.target.value)}
+            />
+            <Input
+              label="Chilled Water Supply Temperature"
+              placeholder="e.g. 7°C"
+              value={form.chilledWaterSupplyTemp}
+              onChange={(e) => set('chilledWaterSupplyTemp', e.target.value)}
+            />
+            <Input
+              label="Chilled Water Return Temperature"
+              placeholder="e.g. 12°C"
+              value={form.chilledWaterReturnTemp}
+              onChange={(e) => set('chilledWaterReturnTemp', e.target.value)}
             />
             <div>
               <p className="text-sm font-medium text-zinc-200 mb-2">Temperature</p>

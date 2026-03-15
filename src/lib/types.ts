@@ -74,7 +74,11 @@ export interface Customer {
   name: string;
   contractId?: string;
   contractedPower?: string;
+  allocatedPower?: string;
+  generatorFuelLevel?: string;
   waterFlowRate?: string;
+  chilledWaterSupplyTemp?: string;
+  chilledWaterReturnTemp?: string;
   temperatureMin?: string;
   temperatureMax?: string;
   humidityMin?: string;
