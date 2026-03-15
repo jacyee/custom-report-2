@@ -18,10 +18,16 @@ export default function NewCustomerPage() {
     contractId: '',
     contractedPower: '',
     allocatedPower: '',
+    allocatedPowerMin: '',
+    allocatedPowerMax: '',
     generatorFuelLevel: '',
     waterFlowRate: '',
     chilledWaterSupplyTemp: '',
+    chilledWaterSupplyTempMin: '',
+    chilledWaterSupplyTempMax: '',
     chilledWaterReturnTemp: '',
+    chilledWaterReturnTempMin: '',
+    chilledWaterReturnTempMax: '',
     temperatureMin: '',
     temperatureMax: '',
     humidityMin: '',
@@ -48,10 +54,16 @@ export default function NewCustomerPage() {
           contractId: form.contractId.trim() || undefined,
           contractedPower: form.contractedPower.trim() || undefined,
           allocatedPower: form.allocatedPower.trim() || undefined,
+          allocatedPowerMin: form.allocatedPowerMin.trim() || undefined,
+          allocatedPowerMax: form.allocatedPowerMax.trim() || undefined,
           generatorFuelLevel: form.generatorFuelLevel.trim() || undefined,
           waterFlowRate: form.waterFlowRate.trim() || undefined,
           chilledWaterSupplyTemp: form.chilledWaterSupplyTemp.trim() || undefined,
+          chilledWaterSupplyTempMin: form.chilledWaterSupplyTempMin.trim() || undefined,
+          chilledWaterSupplyTempMax: form.chilledWaterSupplyTempMax.trim() || undefined,
           chilledWaterReturnTemp: form.chilledWaterReturnTemp.trim() || undefined,
+          chilledWaterReturnTempMin: form.chilledWaterReturnTempMin.trim() || undefined,
+          chilledWaterReturnTempMax: form.chilledWaterReturnTempMax.trim() || undefined,
           temperatureMin: form.temperatureMin.trim() || undefined,
           temperatureMax: form.temperatureMax.trim() || undefined,
           humidityMin: form.humidityMin.trim() || undefined,
@@ -107,12 +119,23 @@ export default function NewCustomerPage() {
               value={form.contractedPower}
               onChange={(e) => set('contractedPower', e.target.value)}
             />
-            <Input
-              label="Allocated Power"
-              placeholder="e.g. 450 kW"
-              value={form.allocatedPower}
-              onChange={(e) => set('allocatedPower', e.target.value)}
-            />
+            <div>
+              <p className="text-sm font-medium text-zinc-200 mb-2">Allocated Power</p>
+              <div className="grid grid-cols-2 gap-3">
+                <Input
+                  label="Lower Limit"
+                  placeholder="e.g. 400 kW"
+                  value={form.allocatedPowerMin}
+                  onChange={(e) => set('allocatedPowerMin', e.target.value)}
+                />
+                <Input
+                  label="Upper Limit"
+                  placeholder="e.g. 500 kW"
+                  value={form.allocatedPowerMax}
+                  onChange={(e) => set('allocatedPowerMax', e.target.value)}
+                />
+              </div>
+            </div>
             <Input
               label="Generator Fuel Level (Litre)"
               placeholder="e.g. 2000"
@@ -125,18 +148,40 @@ export default function NewCustomerPage() {
               value={form.waterFlowRate}
               onChange={(e) => set('waterFlowRate', e.target.value)}
             />
-            <Input
-              label="Chilled Water Supply Temperature"
-              placeholder="e.g. 7°C"
-              value={form.chilledWaterSupplyTemp}
-              onChange={(e) => set('chilledWaterSupplyTemp', e.target.value)}
-            />
-            <Input
-              label="Chilled Water Return Temperature"
-              placeholder="e.g. 12°C"
-              value={form.chilledWaterReturnTemp}
-              onChange={(e) => set('chilledWaterReturnTemp', e.target.value)}
-            />
+            <div>
+              <p className="text-sm font-medium text-zinc-200 mb-2">Chilled Water Supply Temperature</p>
+              <div className="grid grid-cols-2 gap-3">
+                <Input
+                  label="Lower Limit"
+                  placeholder="e.g. 6°C"
+                  value={form.chilledWaterSupplyTempMin}
+                  onChange={(e) => set('chilledWaterSupplyTempMin', e.target.value)}
+                />
+                <Input
+                  label="Upper Limit"
+                  placeholder="e.g. 8°C"
+                  value={form.chilledWaterSupplyTempMax}
+                  onChange={(e) => set('chilledWaterSupplyTempMax', e.target.value)}
+                />
+              </div>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-zinc-200 mb-2">Chilled Water Return Temperature</p>
+              <div className="grid grid-cols-2 gap-3">
+                <Input
+                  label="Lower Limit"
+                  placeholder="e.g. 11°C"
+                  value={form.chilledWaterReturnTempMin}
+                  onChange={(e) => set('chilledWaterReturnTempMin', e.target.value)}
+                />
+                <Input
+                  label="Upper Limit"
+                  placeholder="e.g. 14°C"
+                  value={form.chilledWaterReturnTempMax}
+                  onChange={(e) => set('chilledWaterReturnTempMax', e.target.value)}
+                />
+              </div>
+            </div>
             <div>
               <p className="text-sm font-medium text-zinc-200 mb-2">Temperature</p>
               <div className="grid grid-cols-2 gap-3">
