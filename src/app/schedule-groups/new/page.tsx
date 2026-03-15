@@ -135,35 +135,31 @@ export default function NewScheduleGroupPage() {
               ))}
             </select>
           </div>
-          {form.reportType === 'custom' && (
-            <>
-              <div className="space-y-1">
-                <label className="block text-sm font-medium text-zinc-200">Customer</label>
-                <select
-                  value={form.customerId}
-                  onChange={(e) => set('customerId', e.target.value)}
-                  className="block w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                >
-                  <option value="">Select customer…</option>
-                  {customers.map((c) => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="space-y-1">
-                <label className="block text-sm font-medium text-zinc-200">Site</label>
-                <select
-                  value={form.site}
-                  onChange={(e) => set('site', e.target.value)}
-                  className="block w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                >
-                  {SITE_OPTIONS.map((o) => (
-                    <option key={o.value} value={o.value}>{o.label}</option>
-                  ))}
-                </select>
-              </div>
-            </>
-          )}
+          <div className="space-y-1">
+            <label className="block text-sm font-medium text-zinc-200">Customer</label>
+            <select
+              value={form.customerId}
+              onChange={(e) => set('customerId', e.target.value)}
+              className="block w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            >
+              <option value="">Select customer…</option>
+              {customers.map((c) => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="space-y-1">
+            <label className="block text-sm font-medium text-zinc-200">Site</label>
+            <select
+              value={form.site}
+              onChange={(e) => set('site', e.target.value)}
+              className="block w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            >
+              {SITE_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+          </div>
         </div>
 
         <div>
