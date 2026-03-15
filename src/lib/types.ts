@@ -53,10 +53,25 @@ export interface GenerateRequest {
   format: OutputFormat;
 }
 
+export type ScheduleFrequency = 'daily' | 'weekly' | 'monthly';
+
+export interface ReportScheduleGroup {
+  id: string;
+  name: string;
+  customerId?: string;
+  frequency?: ScheduleFrequency;
+  scheduledTime?: string;
+  recipients?: string;
+  dataFrom?: string;
+  dataTo?: string;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface Customer {
   id: string;
   name: string;
-  email: string;
   contractId?: string;
   contractedPower?: string;
   waterFlowRate?: string;

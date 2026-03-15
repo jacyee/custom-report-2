@@ -41,9 +41,19 @@ export const generateRequestSchema = z.object({
   format: z.enum(['html', 'pdf', 'excel', 'csv']),
 });
 
+export const createScheduleGroupSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  customerId: z.string().optional(),
+  frequency: z.enum(['daily', 'weekly', 'monthly']).optional(),
+  scheduledTime: z.string().optional(),
+  recipients: z.string().optional(),
+  dataFrom: z.string().optional(),
+  dataTo: z.string().optional(),
+  notes: z.string().optional(),
+});
+
 export const createCustomerSchema = z.object({
   name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Valid email is required'),
   contractId: z.string().optional(),
   contractedPower: z.string().optional(),
   waterFlowRate: z.string().optional(),

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import { ReportConfig, Customer } from '@/lib/types';
+import { ReportConfig, Customer, ReportScheduleGroup } from '@/lib/types';
 
 // Use /tmp on Vercel (serverless has a read-only filesystem except /tmp)
 const DATA_DIR = process.env.VERCEL
@@ -9,6 +9,7 @@ const DATA_DIR = process.env.VERCEL
   : path.join(process.cwd(), 'data');
 const DATA_FILE = path.join(DATA_DIR, 'reports.json');
 const CUSTOMERS_FILE = path.join(DATA_DIR, 'customers.json');
+const SCHEDULE_GROUPS_FILE = path.join(DATA_DIR, 'schedule-groups.json');
 
 function ensureDataDir(): void {
   if (!fs.existsSync(DATA_DIR)) {
@@ -99,6 +100,38 @@ function writeAllCustomers(customers: Customer[]): void {
 
 export async function getAllCustomers(): Promise<Customer[]> {
   return readAllCustomers();
+}
+
+// ── Schedule Groups ───────────────────────────────────────────────────────────
+
+function ensureScheduleGroupsFile(): void {
+  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+  if (!fs.existsSync(SCHEDULE_GROUPS_FILE)) fs.writeFileSync(SCHEDULE_GROUPS_FILE, '[]', 'utf-8');
+}
+
+function readAllScheduleGroups(): ReportScheduleGroup[] {
+  ensureScheduleGroupsFile();
+  return JSON.parse(fs.readFileSync(SCHEDULE_GROUPS_FILE, 'utf-8')) as ReportScheduleGroup[];
+}
+
+function writeAllScheduleGroups(groups: ReportScheduleGroup[]): void {
+  ensureScheduleGroupsFile();
+  fs.writeFileSync(SCHEDULE_GROUPS_FILE, JSON.stringify(groups, null, 2), 'utf-8');
+}
+
+export async function getAllScheduleGroups(): Promise<ReportScheduleGroup[]> {
+  return readAllScheduleGroups();
+}
+
+export async function createScheduleGroup(
+  data: Omit<ReportScheduleGroup, 'id' | 'createdAt' | 'updatedAt'>
+): Promise<ReportScheduleGroup> {
+  const groups = readAllScheduleGroups();
+  const now = new Date().toISOString();
+  const group: ReportScheduleGroup = { ...data, id: uuidv4(), createdAt: now, updatedAt: now };
+  groups.push(group);
+  writeAllScheduleGroups(groups);
+  return group;
 }
 
 export async function createCustomer(

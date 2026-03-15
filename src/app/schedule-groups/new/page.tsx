@@ -1,0 +1,194 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import type { Customer } from '@/lib/types';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { DatePicker } from '@/components/ui/date-picker';
+import { useToast } from '@/components/ui/toast';
+
+const FREQUENCY_OPTIONS = [
+  { label: 'Select frequency…', value: '' },
+  { label: 'Daily', value: 'daily' },
+  { label: 'Weekly', value: 'weekly' },
+  { label: 'Monthly', value: 'monthly' },
+];
+
+export default function NewScheduleGroupPage() {
+  const router = useRouter();
+  const { addToast } = useToast();
+
+  const [customers, setCustomers] = useState<Customer[]>([]);
+
+  useEffect(() => {
+    fetch('/api/customers')
+      .then((r) => r.json())
+      .then((data) => { if (Array.isArray(data)) setCustomers(data); })
+      .catch(() => {});
+  }, []);
+
+  const [saving, setSaving] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const [form, setForm] = useState({
+    name: '',
+    customerId: '',
+    frequency: '',
+    scheduledTime: '',
+    recipients: '',
+    notes: '',
+  });
+
+  const [dataFrom, setDataFrom] = useState<Date | null>(null);
+  const [dataTo, setDataTo] = useState<Date | null>(null);
+
+  function set(field: keyof typeof form, value: string) {
+    setForm((f) => ({ ...f, [field]: value }));
+    setErrors((e) => ({ ...e, [field]: '' }));
+  }
+
+  function validate() {
+    const errs: Record<string, string> = {};
+    if (!form.name.trim()) errs.name = 'Name is required';
+    return errs;
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const errs = validate();
+    if (Object.keys(errs).length) { setErrors(errs); return; }
+
+    setSaving(true);
+    try {
+      const res = await fetch('/api/schedule-groups', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          customerId: form.customerId || undefined,
+          frequency: form.frequency || undefined,
+          scheduledTime: form.scheduledTime.trim() || undefined,
+          recipients: form.recipients.trim() || undefined,
+          dataFrom: dataFrom?.toISOString() ?? undefined,
+          dataTo: dataTo?.toISOString() ?? undefined,
+          notes: form.notes.trim() || undefined,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error ?? 'Failed to create schedule group');
+      }
+
+      addToast('Schedule group created successfully', 'success');
+      router.push('/');
+    } catch (err) {
+      addToast(err instanceof Error ? err.message : 'Something went wrong', 'error');
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="max-w-xl mx-auto">
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-zinc-100">New Report Schedule Group</h1>
+        <p className="text-sm text-zinc-400 mt-1">Configure a new report schedule group.</p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-6 bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+        <div className="space-y-4">
+          <Input
+            label="Name *"
+            placeholder="Schedule Group A"
+            value={form.name}
+            onChange={(e) => set('name', e.target.value)}
+            error={errors.name}
+          />
+          <div className="space-y-1">
+            <label className="block text-sm font-medium text-zinc-200">Customer</label>
+            <select
+              value={form.customerId}
+              onChange={(e) => set('customerId', e.target.value)}
+              className="block w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            >
+              <option value="">Select customer…</option>
+              {customers.map((c) => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-3">Schedule</h2>
+          <div className="space-y-4">
+            <div className="space-y-1">
+              <label className="block text-sm font-medium text-zinc-200">Frequency</label>
+              <select
+                value={form.frequency}
+                onChange={(e) => set('frequency', e.target.value)}
+                className="block w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              >
+                {FREQUENCY_OPTIONS.map((o) => (
+                  <option key={o.value} value={o.value}>{o.label}</option>
+                ))}
+              </select>
+            </div>
+            <Input
+              label="Scheduled Time"
+              type="time"
+              value={form.scheduledTime}
+              onChange={(e) => set('scheduledTime', e.target.value)}
+            />
+            <Input
+              label="Recipients"
+              placeholder="email1@example.com, email2@example.com"
+              value={form.recipients}
+              onChange={(e) => set('recipients', e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div>
+          <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-3">Report Data Duration</h2>
+          <div className="grid grid-cols-2 gap-3">
+            <DatePicker
+              label="From"
+              value={dataFrom}
+              onChange={setDataFrom}
+              maxDate={dataTo ?? undefined}
+            />
+            <DatePicker
+              label="To"
+              value={dataTo}
+              onChange={setDataTo}
+              minDate={dataFrom ?? undefined}
+            />
+          </div>
+        </div>
+
+        <div className="space-y-1">
+          <label className="block text-sm font-medium text-zinc-200">Notes</label>
+          <textarea
+            rows={3}
+            placeholder="Any additional notes…"
+            value={form.notes}
+            onChange={(e) => set('notes', e.target.value)}
+            className="block w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"
+          />
+        </div>
+
+        <div className="flex items-center gap-3 pt-2">
+          <Button type="submit" loading={saving}>
+            Create Schedule Group
+          </Button>
+          <Button type="button" variant="secondary" onClick={() => router.back()}>
+            Cancel
+          </Button>
+        </div>
+      </form>
+    </div>
+  );
+}
